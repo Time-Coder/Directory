@@ -18,7 +18,7 @@ void dir::format(string& filename)
 			it++;
 		}
 	}
-	if(filename[0] != '/' && filename[1] != ':')
+	if(filename[0] != '.' && filename[0] != '/' && filename[1] != ':')
 	{
 		filename = string("./") + filename;
 	}
@@ -123,6 +123,10 @@ bool dir::exist(string name)
 int dir::mkdir(string dirname)
 {
 	dir::format(dirname);
+	if(dirname[dirname.size()-1] == '/')
+	{
+		dirname.erase(dirname.size()-1, 1);
+	}
 
 	stack<string> S;
 	int n = dirname.size();
@@ -155,10 +159,18 @@ int dir::mkdir(string dirname)
 
 	while(!S.empty())
 	{
-		if(0 != ::mkdir(S.top().c_str()))
+		int flag;
+		#ifdef __linux__
+			flag = ::mkdir(S.top().c_str(), 0755);
+		#else
+			flag = ::mkdir(S.top().c_str());
+		#endif
+
+		if(flag != 0)
 		{
 			return -1;
 		}
+
 		S.pop();
 	}
 
@@ -218,7 +230,7 @@ int copy_file_to_dir(const string& filename, const string& dir_name)
 	{
 		return 1;
 	}
-
+	
 	ifstream ifile(filename.c_str(), ios::binary);
 	ofstream ofile((dir_name + "/" + only_name(filename)).c_str(), ios::binary);
 	ofile << ifile.rdbuf();

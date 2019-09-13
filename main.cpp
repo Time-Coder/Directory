@@ -2,7 +2,8 @@
 
 int main()
 {
-	cout << dir::rm("b") << endl;
+	dir::touch("test/aloha");
+	dir::rename("test", "papa");
 
 	return 0;
 }
