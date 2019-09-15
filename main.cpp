@@ -2,8 +2,7 @@
 
 int main()
 {
-	dir::touch("test/aloha");
-	dir::rename("test", "papa");
+	dir::rm("hello");
 
 	return 0;
 }

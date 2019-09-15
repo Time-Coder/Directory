@@ -1,3 +1,4 @@
-JustMakefile
+.Makefile
 main
-main.exe
+*.exe
+*.o
